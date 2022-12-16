@@ -5,16 +5,25 @@ score = document.getElementById('score'),
 size = {
     x: 50,
     y: 50
-}
+},
+load_val = 200
+
+let loaded_data = 0,
+load_finished = false,
+loading_iters = 0
 
 const loaded = {
     bg: false,
-    bird: false
+    bird: false,
+    bird_down: false,
+    bird_up: false
 }
 
 const images = {
     bird: new Image(),
-    bg: new Image()
+    bg: new Image(),
+    bird_down: new Image(),
+    bird_up: new Image()
 }
 
 
@@ -40,29 +49,52 @@ document.addEventListener("DOMContentLoaded", () => {
     function loadGraphics() {
         images.bird.src = 'textures/bird.png'
         images.bg.src = 'textures/bg.png'
+        images.bird_down.src = 'textures/bird_down.png'
+        images.bird_up.src = 'textures/bird_up.png'
     
-        images.bird.onload = () => {loaded.bird = true}
-        images.bg.onload = () => {loaded.bg = true}
-    
+        images.bird.onload = () => {
+            loaded.bird = true
+            loaded_data += 1
+        }
+        images.bg.onload = () => {
+            loaded.bg = true
+            loaded_data += 1
+        }
+        images.bird_down.onload = () => {
+            loaded.bird_down = true
+            loaded_data += 1
+        }
+        images.bird_up.onload = () => {
+            loaded.bird_up = true
+            loaded_data += 1
+        }
         wait()
     }
     
     function dots() {
+        /*
         if (document.getElementById('loading').innerText == '') {
             document.getElementById('loading').innerText = 'Загрузка'
         }
         document.getElementById('loading').innerText += '.'
+        */
+       document.getElementById('insidebar').style.width =  loading_iters / load_val * 100 + '%'
+       if (loading_iters === load_val) {
+        load_finished = true
+       } else {
+        loading_iters += 1
+       }
     }
     
     function wait() {
-        if (loaded.bg && loaded.bird) {
+        if (loaded.bg && loaded.bird && loaded.bird_down && load_finished) {
             document.getElementById('loading').style.opacity = 0
             document.getElementById('loading').style.zIndex = 0
             preparation()
             animate()
         } else {
             setInterval(dots, 10)
-            setTimeout(wait, 1000)
+            setTimeout(wait, 200)
         }
     }
     defaultRange = defaultRange / canvas.height * window.innerHeight
@@ -89,8 +121,16 @@ document.addEventListener("DOMContentLoaded", () => {
         draw() {
             //rectangle(this.color, this.position.x, 
                 //this.position.y, this.width, this.height)
-            ctx.drawImage(images.bird, this.position.x,
-                this.position.y, this.width, this.height)
+            if (this.down > 0) {
+                ctx.drawImage(images.bird_down, this.position.x,
+                    this.position.y, this.width, this.height)
+            } else if (this.down < 0) {
+                ctx.drawImage(images.bird_up, this.position.x,
+                    this.position.y, this.width, this.height)
+            } else {
+                ctx.drawImage(images.bird, this.position.x,
+                    this.position.y, this.width, this.height)
+            }
         }
     
         update() {

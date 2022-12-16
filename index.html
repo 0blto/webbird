@@ -8,6 +8,7 @@
             position: relative;
             overflow: hidden;
             height: 100vh;
+            background-color: rgb(29, 29, 29);
         }
 
         canvas {
@@ -46,6 +47,24 @@
             bottom: 0;
             z-index: 2;
         }
+
+        #bar {
+            position: relative;
+            margin: auto;
+            margin-top: 50vh;
+            width: 40%;
+            height: 5vh;
+            border: 1vh solid #EEEEEE;
+            background-color: black;
+        }
+        #insidebar {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 100%;
+            background-color: #EEEEEE;
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,7 +72,9 @@
 </head>
 <body>
     <div id="loading">
-        
+        <div id="bar">
+            <div id="insidebar"></div>
+        </div>
     </div>
     <canvas></canvas>
     <button id="start" style="opacity: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Start</button>
